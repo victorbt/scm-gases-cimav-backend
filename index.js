@@ -3,6 +3,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
+import jwt from 'jsonwebtoken';
+import {
+  createTokens
+} from './auth'
 
 import {
   graphqlExpress,
@@ -20,12 +24,12 @@ const app = express();
 passport.use(new GoogleStrategy({
     clientID: '711526008376-luogluhf7p7a0joqki4jv26v35tun87v.apps.googleusercontent.com',
     clientSecret: '1lVr2cRbWSR2VJWqS-fJV2f8',
-    callbackURL: 'https://bee7ab3b.ngrok.io/auth/google/callback',
+    callbackURL: 'https://01e87598.ngrok.io/auth/google/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(profile);
     console.log(profile.emails[0].value);
-    cb(null, {});
+    cb(null, profile);
   },
 ));
 
@@ -44,8 +48,7 @@ app.get(
     session: false,
   }),
   (req, res) => {
-    // res.send('AuthWAS GOOD');
-    res.redirect('http://localhost:4200/home?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ');
+    res.send(req.user);
   },
 );
 
