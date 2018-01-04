@@ -4,13 +4,16 @@ export default (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
     },
+    email: {
+      type: DataTypes.STRING,
+    },
   });
 
   // User associations
   User.associate = (models) => {
     // User can have many gases
-    User.hasMany(models.Gas, {
-      foreignKey: 'ownerId',
+    User.hasMany(models.Order, {
+      foreignKey: 'user_id',
     });
   };
 

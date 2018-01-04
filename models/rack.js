@@ -1,16 +1,16 @@
 export default (sequelize, DataTypes) => {
-  // User Model
+  // Rack Model
   const Rack = sequelize.define('Rack', {
     number: {
       type: DataTypes.STRING,
     },
   });
 
-  // User associations
+  // Rack associations
   Rack.associate = (models) => {
     // User can have many gases
     Rack.hasMany(models.Gas, {
-      foreignkey: 'rackId',
+      foreignKey: 'rack_id',
     });
   };
 
