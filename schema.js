@@ -17,6 +17,8 @@ type Gas{
   type: GasType!
   order: Order!
   rack: Rack!
+  status: Int!
+  user: User!
 }
 
 type GasType{
@@ -32,20 +34,24 @@ type Order{
 
 type Query{
   allUsers: [User!]!
+  allGasesTypes: [GasType!]!
+  allGases: [Gas!]!
+  allOrders: [Order!]!
   getUser(user: String!): User!
   getUserGases(userId: Int!): [Gas!]!
+  getOrderGases(orderId: Int!): [Gas!]!
   getUserOrders(userId: Int!): [Order!]!
-  allGasesTypes:[GasType!]!
-  allGases:[Gas!]!
-  allOrders:[Order!]!
+
 }
+
 
 type Mutation{
   createUser(username: String!,email:String!):User
   createOrder(order_identifier: String!,user_id:Int!):Order!
   updateUser(username: String!, newUsername: String!):[Int!]!
   deleteUser(username: String!): Int!
-  createGas( gas_type_id:Int!,order_id: Int!,rack_id:Int!): Gas!
+  createGas(gas_type_id:Int!, order_id: Int!, rack_id:Int!, status:Int!): Gas!
+  updateGasStatus(gas_id: Int!, status: Int! ): Int!
   createGasType(name: String!): GasType!
   createRack(number: String!):Rack!
 }

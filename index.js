@@ -27,7 +27,7 @@ const SECRET2 = 'elobed';
 passport.use(new GoogleStrategy({
     clientID: '711526008376-luogluhf7p7a0joqki4jv26v35tun87v.apps.googleusercontent.com',
     clientSecret: '1lVr2cRbWSR2VJWqS-fJV2f8',
-    callbackURL: 'https://1a963bc2.ngrok.io/auth/google/callback',
+    callbackURL: 'https://6f5c69d9.ngrok.io/auth/google/callback',
   },
   async(accessToken, refreshToken, profile, cb) => {
     if (await models.User.findOne({

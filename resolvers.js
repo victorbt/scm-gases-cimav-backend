@@ -1,4 +1,7 @@
 import Sequelize from 'sequelize';
+import _ from 'lodash';
+
+const Op = Sequelize.Op;
 
 import {
   requiresAuth,
@@ -42,14 +45,23 @@ export default {
           id: rack_id,
         },
       }),
+    user: ({
+        order_id,
+    }, args, {
+      models,
+    }) => models.User.findOne({
+      include:[{
+        model: models.Order,
+        where:{ id : order_id}
+      }]
+    })
   },
 
   User: {
-
   },
+
+
   Rack: {
-
-
   },
 
   Order: {
@@ -96,11 +108,32 @@ export default {
     //
     getUserGases: (parent, {
       userId,
-    }) => sequelize.query('SELECT * FROM Gas WHERE order_id in(SELECT id FROM Orders WHERE user_id = :n);', {
-      replacements: {
-        n: userId,
+    },{models,user}) => {
+      if(userId==0 ){
+        return sequelize.query('SELECT * FROM Gas WHERE order_id in(SELECT id FROM Orders WHERE user_id = :n);', {
+          replacements: {
+            n: user.id
+          },
+          type: sequelize.QueryTypes.SELECT,
+        })
+      }else{
+        return sequelize.query('SELECT * FROM Gas WHERE order_id in(SELECT id FROM Orders WHERE user_id = :n);', {
+          replacements: {
+            n: userId
+          },
+          type: sequelize.QueryTypes.SELECT,
+        })
+      }
+  },
+    //
+    getOrderGases: (parent, {
+      orderId,
+    },{
+      models,
+    }) => models.Gas.findAll({
+      where: {
+        order_id: orderId,
       },
-      type: sequelize.QueryTypes.SELECT,
     }),
     //
     getUserOrders: (parent, {
@@ -109,7 +142,7 @@ export default {
       models,
     }) => models.Order.findAll({
       where: {
-        id: userId,
+        user_id: userId,
       },
     }),
     //
@@ -144,6 +177,16 @@ export default {
     createGas: (parent, args, {
       models,
     }) => models.Gas.create(args),
+    //
+    updateGasStatus:(parent, { gas_id , status },{
+      models
+    })=> models.Gas.update({
+       status
+    }, {
+      where:{
+        id: gas_id,
+      }
+    }),
     //
     createGasType: (parent, args, {
       models,

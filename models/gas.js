@@ -1,7 +1,9 @@
 export default (sequelize, DataTypes) => {
   // Gas Model
   const Gas = sequelize.define('Gas', {
-
+    status: {
+      type: DataTypes.INTEGER,
+    },
   });
 
 

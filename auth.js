@@ -18,9 +18,7 @@ export const createTokens =
         expiresIn: '30d',
       },
     );
-
     return Promise.all([createToken, createRefreshToken]);
-
   };
 
 
